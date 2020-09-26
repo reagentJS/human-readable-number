@@ -1,7 +1,6 @@
 module.exports = function toReadable(number) {
 
     const one = {
-        0: 'zero',
         1: 'one',
         2: 'two',
         3: 'three',
@@ -34,13 +33,14 @@ module.exports = function toReadable(number) {
         90: 'ninety',
     };
 
+    if (number === 0) return 'zero';
     if (number < 20) return one[number];
     let numberToArray = number.toString().split('');
     let res = '';
 
     function twoDigits(numberToArray) {
-        let res = `${two[numberToArray[0].concat('0')]} ${one[numberToArray[1]]}`;
-        if (numberToArray[1] === '0') res = res.slice(0, -5);
+        let res = two[numberToArray[0].concat('0')];
+        if (numberToArray[1] !== '0') res += ` ${one[numberToArray[1]]}`;
         return res;
     }
 
@@ -50,8 +50,8 @@ module.exports = function toReadable(number) {
         res = `${one[numberToArray[0]]} hundred`;
         let sliced = numberToArray.slice(1).join('');
         if (sliced === '00') return res;
-        if (sliced < 20) res = `${res} ${one[+sliced]}`;
-        else res = `${res} ${twoDigits(sliced)}`;
+        if (sliced < 20) res += ` ${one[+sliced]}`;
+        else res += ` ${twoDigits(sliced)}`;
     }
 
     return res;
